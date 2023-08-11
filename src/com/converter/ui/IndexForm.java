@@ -4,9 +4,11 @@
  */
 package com.converter.ui;
 
+import com.converter.classes.*;
 import com.converter.utils.UtilForms;
 import java.awt.Image;
 import java.awt.Toolkit;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -14,15 +16,29 @@ import java.awt.Toolkit;
  */
 public class IndexForm extends javax.swing.JFrame {
     private final UtilForms util;
+    private final ConversionForm currencyForm;
+    private final CurrencyConverter currencyConverter;    
+    private final TemperatureConverter temperatureConverter;
+    private final TimeConverter timeConverter;
+    private final LengthConverter lenghtConverter;
+    private final SpeedConverter speedConverter;
+
     /**
      * Creates new form Index
      */
     public IndexForm() {
-        this.util = new UtilForms(this);
         initComponents();
         this.setLocationRelativeTo(null);
-        util.setRoundedBorder();
-        util.moveWindow();
+        this.util = new UtilForms(this);
+        this.util.setRoundedBorder();
+        this.util.moveWindow();
+        
+        this.currencyForm = new ConversionForm();
+        this.currencyConverter = new CurrencyConverter("Currency Converter");        
+        this.temperatureConverter = new TemperatureConverter("Temperature Converter");
+        this.timeConverter = new TimeConverter("Time Converter");
+        this.lenghtConverter = new LengthConverter("Length Converter");
+        this.speedConverter = new SpeedConverter("Speed Converter");
     }
     
     @Override
@@ -30,6 +46,12 @@ public class IndexForm extends javax.swing.JFrame {
         Image retValue = Toolkit.getDefaultToolkit()
                                  .getImage(ClassLoader.getSystemResource("com/converter/images/convert-logo.png"));
         return retValue;
+    }
+    
+    private void changeDataToConverter(Converter dataConverter) {
+        this.currencyForm.setConversionData(dataConverter);
+        this.currencyForm.setVisible(true);
+        this.setVisible(false);
     }
 
     /**
@@ -45,12 +67,11 @@ public class IndexForm extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         buttonTemperature = new javax.swing.JButton();
-        buttonLength = new javax.swing.JButton();
         buttonAbout = new javax.swing.JButton();
+        buttonLength = new javax.swing.JButton();
         buttonCurrency = new javax.swing.JButton();
         buttonSpeed = new javax.swing.JButton();
         buttonTime = new javax.swing.JButton();
-        buttonDataSize = new javax.swing.JButton();
         buttonExit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -60,7 +81,7 @@ public class IndexForm extends javax.swing.JFrame {
         setResizable(false);
         setSize(new java.awt.Dimension(600, 600));
 
-        jPanel1.setBackground(new java.awt.Color(11, 50, 127));
+        jPanel1.setBackground(new java.awt.Color(0, 51, 51));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -85,19 +106,6 @@ public class IndexForm extends javax.swing.JFrame {
             }
         });
 
-        buttonLength.setBackground(new java.awt.Color(51, 51, 51));
-        buttonLength.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        buttonLength.setForeground(new java.awt.Color(255, 255, 255));
-        buttonLength.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/converter/images/length.png"))); // NOI18N
-        buttonLength.setText("Length");
-        buttonLength.setToolTipText("Length");
-        buttonLength.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        buttonLength.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonLengthActionPerformed(evt);
-            }
-        });
-
         buttonAbout.setBackground(new java.awt.Color(51, 51, 51));
         buttonAbout.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         buttonAbout.setForeground(new java.awt.Color(255, 255, 255));
@@ -108,6 +116,19 @@ public class IndexForm extends javax.swing.JFrame {
         buttonAbout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonAboutActionPerformed(evt);
+            }
+        });
+
+        buttonLength.setBackground(new java.awt.Color(51, 51, 51));
+        buttonLength.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        buttonLength.setForeground(new java.awt.Color(255, 255, 255));
+        buttonLength.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/converter/images/length.png"))); // NOI18N
+        buttonLength.setText("Length");
+        buttonLength.setToolTipText("Length");
+        buttonLength.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        buttonLength.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonLengthActionPerformed(evt);
             }
         });
 
@@ -150,19 +171,6 @@ public class IndexForm extends javax.swing.JFrame {
             }
         });
 
-        buttonDataSize.setBackground(new java.awt.Color(51, 51, 51));
-        buttonDataSize.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        buttonDataSize.setForeground(new java.awt.Color(255, 255, 255));
-        buttonDataSize.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/converter/images/byte.png"))); // NOI18N
-        buttonDataSize.setText("Data");
-        buttonDataSize.setToolTipText("Data Size");
-        buttonDataSize.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        buttonDataSize.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonDataSizeActionPerformed(evt);
-            }
-        });
-
         buttonExit.setBackground(new java.awt.Color(255, 255, 255));
         buttonExit.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         buttonExit.setForeground(new java.awt.Color(0, 0, 0));
@@ -184,26 +192,24 @@ public class IndexForm extends javax.swing.JFrame {
                 .addGap(27, 27, 27)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 517, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(buttonExit))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(buttonCurrency)
-                                .addGap(30, 30, 30)
+                        .addGap(45, 45, 45)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(buttonTime, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(buttonCurrency, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(buttonSpeed, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(41, 41, 41)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(buttonAbout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(buttonDataSize, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(buttonTemperature, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(30, 30, 30)
-                                .addComponent(buttonSpeed, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(buttonTime, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(220, 220, 220)
-                                .addComponent(buttonLength, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGap(0, 21, Short.MAX_VALUE)))
+                                    .addComponent(buttonLength, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(buttonTemperature, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                                    .addComponent(buttonAbout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 441, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -214,23 +220,23 @@ public class IndexForm extends javax.swing.JFrame {
                         .addGap(5, 5, 5)
                         .addComponent(buttonExit))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(12, Short.MAX_VALUE)
+                        .addContainerGap(21, Short.MAX_VALUE)
                         .addComponent(jLabel1)))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buttonCurrency)
-                    .addComponent(buttonTemperature)
-                    .addComponent(buttonSpeed))
-                .addGap(30, 30, 30)
+                    .addComponent(buttonTemperature))
+                .addGap(27, 27, 27)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(buttonDataSize)
-                    .addComponent(buttonLength)
-                    .addComponent(buttonTime))
-                .addGap(30, 30, 30)
-                .addComponent(buttonAbout)
-                .addGap(26, 26, 26))
+                    .addComponent(buttonTime)
+                    .addComponent(buttonLength))
+                .addGap(27, 27, 27)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(buttonSpeed)
+                    .addComponent(buttonAbout))
+                .addGap(23, 23, 23))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -248,33 +254,32 @@ public class IndexForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAboutActionPerformed
-        // TODO add your handling code here:
+        String message = """
+                         This project is a converter of different things created by Bairon Cano. 
+                         Furthermore, it is a solution to Alura Latam's challenge of the
+                          Object-Oriented Java path.""";
+        JOptionPane.showMessageDialog(rootPane, message,
+                    "About the project", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_buttonAboutActionPerformed
 
     private void buttonSpeedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSpeedActionPerformed
-        // TODO add your handling code here:
+        this.changeDataToConverter(speedConverter);
     }//GEN-LAST:event_buttonSpeedActionPerformed
 
     private void buttonTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonTimeActionPerformed
-        // TODO add your handling code here:
+        this.changeDataToConverter(timeConverter);
     }//GEN-LAST:event_buttonTimeActionPerformed
 
-    private void buttonDataSizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonDataSizeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_buttonDataSizeActionPerformed
-
     private void buttonLengthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonLengthActionPerformed
-        // TODO add your handling code here:
+        this.changeDataToConverter(lenghtConverter);
     }//GEN-LAST:event_buttonLengthActionPerformed
 
     private void buttonCurrencyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCurrencyActionPerformed
-        ConversionForm currencyForm = new ConversionForm();
-        currencyForm.setVisible(true);
-        this.setVisible(false);
+        this.changeDataToConverter(currencyConverter);
     }//GEN-LAST:event_buttonCurrencyActionPerformed
 
     private void buttonTemperatureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonTemperatureActionPerformed
-        // TODO add your handling code here:
+        this.changeDataToConverter(temperatureConverter);
     }//GEN-LAST:event_buttonTemperatureActionPerformed
 
     private void buttonExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonExitActionPerformed
@@ -318,7 +323,6 @@ public class IndexForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonAbout;
     private javax.swing.JButton buttonCurrency;
-    private javax.swing.JButton buttonDataSize;
     private javax.swing.JButton buttonExit;
     private javax.swing.JButton buttonLength;
     private javax.swing.JButton buttonSpeed;
